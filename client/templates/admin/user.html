@@ -1,0 +1,30 @@
+<template name="adminUsers">
+  <div class="content">
+      <ul class="table-view">
+        {{#each user}}
+          <li class="table-view-cell">
+            {{profile.firstName}} {{profile.lastName}} - {{emails.[0].address}}
+
+            {{#if hasRole 'admin'}}
+              <button class="btn btn-negative removeAdmin" data-ignore="push" style="right: 175px !important;">
+                <span class="icon icon-close"></span> Admin
+              </button>
+            {{else}}
+              <button class="btn addAdmin" data-ignore="push" style="right: 175px !important;">
+                <span class="icon icon-plus"></span> Admin
+              </button>
+            {{/if}}
+
+            <button class="btn decrTrust" data-ignore="push" style="right: 115px !important;">
+              <span class="icon icon-down"></span>
+            </button>
+            <span class="badge" style="right: 55px !important;">{{profile.trust}}/{{maxTrust}}</span>
+            <button class="btn incrTrust" data-ignore="push">
+              <span class="icon icon-up"></span>
+            </button>
+
+          </li>
+        {{/each}}
+      </ul>
+  </div>
+</template>

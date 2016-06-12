@@ -1,0 +1,64 @@
+<template name="browseConcepts">
+  <div class="content">
+    <ul class="table-view">
+      {{#each result}}
+        <li class="table-view-cell">
+          <a class="navigate-right" data-ignore="push" href="/babel/{{uuid}}">
+            {{firstUpper subject}}
+            <span class="badge">{{extra.trust}}/{{maxTrust}}</span>
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</template>
+
+<template name="babelConcept">
+  <div class="content">
+      {{#with options}}
+          <select class="selectTranslation">
+            <option value="">+</option>
+            {{#each this}}
+              <option value="{{uuid}}">
+                  {{firstUpper subject}}
+              </option>
+              <option value="other">other</option>
+            {{/each}}
+          </select>
+      {{/with}}
+      {{#if newTranslation}}
+          <label>Translate</label>
+          <input type="text" placeholder="..." id="newTranslation">
+          <label>Source Name</label>
+          <input type="text" placeholder="..." id="sourceN">
+          <label>Source URL</label>
+          <input type="text" placeholder="..." id="sourceUrl">
+          <button class="btn btn-primary btn-block btn-outlined" id="newTranslationB">
+            <span class="icon icon-check"></span>
+          </button>
+      {{/if}}
+    <ul class="table-view">
+      {{#each translation}}
+        <li class="table-view-cell">
+            <img src="/flags/{{lang}}.png" class="langflag"> {{firstUpper subject}}
+        </li>
+      {{/each}}
+
+      <li class="table-view-cell flex">
+          {{#each path}}
+            <a href="/babel/{{uuid}}" data-ignore="push"><strong>{{firstUpper subject}}</strong></a> &nbsp;>&nbsp;
+          {{/each}}
+          {{#with subj}}
+            <a href="/babel/{{uuid}}" data-ignore="push"><strong>{{subject}}</strong></a>
+          {{/with}}
+      </li>
+      {{#each kids}}
+        <li class="table-view-cell">
+          <a class="navigate-right" href="/babel/{{uuid}}" data-ignore="push">
+            {{firstUpper subject}}
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</template>

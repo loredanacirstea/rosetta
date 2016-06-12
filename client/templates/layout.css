@@ -1,0 +1,53 @@
+html, body {
+  height: 100%;
+  width:  100%;
+}
+
+#__blaze-root {
+  overflow: auto;
+  height: 100%;
+  width:  100%;
+}
+
+.buttonIcon {
+  font-size: 20px !important;
+}
+
+.langflag {
+  width: 1.5%;
+}
+
+.helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+
+.syslang {
+   vertical-align: middle;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.link {
+  color: "#0B7FFF" !important;
+}
+
+.omegaTitle {
+  height: 100%;
+}
+
+.variableInput, .formulaResult {
+  width: 80% !important;
+}
+
+.logo {
+  width: 20%;
+  margin-left: 40%;
+}

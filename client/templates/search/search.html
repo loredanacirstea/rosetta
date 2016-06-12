@@ -1,0 +1,15 @@
+<template name="searchFormula">
+  <div class="content">
+    <input type="text" placeholder="..." class="searchFormula">
+    <ul class="table-view">
+      {{#each result}}
+        <li class="table-view-cell">
+          <a class="navigate-right" data-ignore="push" href="/babel/{{uuid}}">
+            {{firstUpper subject}}
+            <span class="badge">{{extra.trust}}/{{maxTrust}}</span>
+          </a>
+        </li>
+      {{/each}}
+    </ul>
+  </div>
+</template>

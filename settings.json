@@ -1,0 +1,22 @@
+{
+  "electron": {
+    "name": "Rosetta",
+    "icon": {
+      "darwin": "public/electron-icons/rosetta.icns",
+      "win32": "public/electron-icons/rosetta.ico"
+    },
+    "version": "0.1.1",
+    "description": "Crowdsourced translations app",
+    "rootUrl": "http://orobo.go.ro:7100",
+    "height": 768,
+    "width": 1024,
+    "frame": true,
+    "title-bar-style": "hidden",
+    "resizable": true,
+    "downloadUrls": {
+      "win32.installer": "/download/win/Rosetta.exe",
+      "darwin": "/download/osx/Rosetta.zip"
+    }
+  }
+}
+ 
