@@ -15,17 +15,25 @@
 
 <template name="babelConcept">
   <div class="content">
-      {{#with options}}
+    {{#with currentTransl}}
+      <ul class="table-view">
+        <li class="table-view-cell">
+          <img src="/flags/{{lang}}.png" class="langflag"> {{firstUpper subject}}
+          <span class="badge">{{extra.trust}}/{{maxTrust}}</span>
+        </li>
+      </ul>
+    {{/with}}
+      {{#if options}}
           <select class="selectTranslation">
             <option value="">+</option>
-            {{#each this}}
-              <option value="{{uuid}}">
-                  {{firstUpper subject}}
+            {{#each options}}
+              <option value="{{subject}}" data-id="{{_id}}">
+                  {{firstUpper subject}} - {{extra.trust}}/{{maxTrust}}
               </option>
-              <option value="other">other</option>
             {{/each}}
+            <option value="other">add a translation...</option>
           </select>
-      {{/with}}
+      {{/if}}
       {{#if newTranslation}}
           <label>Translate</label>
           <input type="text" placeholder="..." id="newTranslation">
@@ -33,9 +41,11 @@
           <input type="text" placeholder="..." id="sourceN">
           <label>Source URL</label>
           <input type="text" placeholder="..." id="sourceUrl">
-          <button class="btn btn-primary btn-block btn-outlined" id="newTranslationB">
-            <span class="icon icon-check"></span>
-          </button>
+      {{/if}}
+      {{#if currentUser}}
+        <button class="btn btn-primary btn-block btn-outlined" id="newTranslationB">
+          <span class="icon icon-plus"></span>
+        </button>
       {{/if}}
     <ul class="table-view">
       {{#each translation}}
@@ -45,12 +55,14 @@
       {{/each}}
 
       <li class="table-view-cell flex">
+        <p>
           {{#each path}}
-            <a href="/babel/{{uuid}}" data-ignore="push"><strong>{{firstUpper subject}}</strong></a> &nbsp;>&nbsp;
+            <a href="/babel/{{uuid}}" data-ignore="push" style="color: #000000 !important;"><strong>{{firstUpper subject}}</strong></a> &nbsp;>&nbsp;
           {{/each}}
           {{#with subj}}
-            <a href="/babel/{{uuid}}" data-ignore="push"><strong>{{subject}}</strong></a>
+            <a href="/babel/{{uuid}}" data-ignore="push" style="color: #000000 !important;"><strong>{{subject}}</strong></a>
           {{/with}}
+        </p>
       </li>
       {{#each kids}}
         <li class="table-view-cell">

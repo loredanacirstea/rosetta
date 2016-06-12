@@ -54,37 +54,13 @@ subjectro.ss.subject = new SimpleSchema({
     type: Object,
     optional: true,
     blackbox: true
-  }/*,
-  author: {
-    type: String,
-    label: 'Author Email',
-    optional: true,
-    autoValue: function() {
-      var u = Meteor.user(), em
-
-      if(this.value && u && u.roles && u.roles.admin)
-        return this.value
-
-      if(u && u.emails && u.emails[0])
-        em = u.emails[0].address
-      
-      if(this.isInsert && em)
-        return em
-
-      this.unset()
-    }
-  }*/
+  }
 })
 
 subjectro.ss.relation = new SimpleSchema({
   uuid1: {
     type: String,
-    label: "UUID1",
-    /*autoform: {
-      options: [
-
-      ]
-    }*/
+    label: "UUID1"
   },
   uuid2: {
     type: String,
@@ -92,15 +68,7 @@ subjectro.ss.relation = new SimpleSchema({
   },
   relation: {
     type: Number,
-    label: "Relation",
-    //allowedValues: [1, 13, 15],
-    /*autoform: {
-      options: [
-        {label: 'structural - 1', value: 1},
-        {label: 'has unit - 13', value: 13},
-        {label: 'has variable - 15', value: 15}
-      ]
-    }*/
+    label: "Relation"
   },
   ordering: {
     type: Number,
@@ -137,26 +105,7 @@ subjectro.ss.relation = new SimpleSchema({
 
       this.unset();  // Prevent user from supplying their own value
     }
-  }/*,
-  author: {
-    type: String,
-    label: 'Author Email',
-    optional: true,
-    autoValue: function() {
-      var u = Meteor.user(), em
-
-      if(this.value && u && u.roles && u.roles.admin)
-        return this.value
-
-      if(u && u.emails && u.emails[0])
-        em = u.emails[0].address
-      
-      if(this.isInsert && em)
-        return em
-
-      this.unset()
-    }
-  }*/
+  }
 })
 
 subjectro.coll.subject.attachSchema(subjectro.ss.subject)

@@ -7,11 +7,27 @@ Template.browseConcepts.onCreated(function() {
   SubjectSubs.subscribe('subjectstrust', {lang: sysLang.get()}, {skip: skip, limit: limit})
 })
 
+Template.browseConcepts.onRendered(function() {
+  if(!Meteor.userId())
+    FlowRouter.go('/settings')
+})
+
 Template.browseConcepts.helpers({
   result: function() {
     var page = FlowRouter.getQueryParam('page')
     var skip = page ? (parseInt(page) * limit) : 0
-    return Subject.find({lang: sysLang.get()}, {skip: skip, limit: limit})
+    var obj = Subject.find({lang: sysLang.get()}, {skip: skip, limit: limit}).fetch()
+    obj.sort(function(a,b) {
+      return b.extra.trust - a.extra.trust
+    })
+    var res = [], subjs = []
+    obj.forEach(function(o) {
+      if(subjs.indexOf(o.subject) == -1) {
+        res.push(o)
+        subjs.push(o.subject)
+      }
+    })
+    return obj
   }
 })
 
@@ -55,15 +71,30 @@ Template.babelConcept.helpers({
     })
   },
   translation: function() {
-    return Subject.find({uuid: routeUuid.get(), lang: {$ne: 'jp'}}, {sort: {lang: -1}})
+    return Subject.find({uuid: routeUuid.get(), lang: {$nin: ['jp', 'es-p']}}, {sort: {lang: -1}})
   },
   newTranslation: function() {
     return Template.instance().newTrans.get()
   },
+  currentTransl: function() {
+    return Subject.findOne({uuid: routeUuid.get(), lang: sysLang.get()}, {sort: {'extra.trust': -1}})
+  },
   options: function() {
     if(!Meteor.user()) 
       return
-    return Subject.find({uuid: routeUuid.get()}, {sort: {trust: -1}})
+    var en = Subject.findOne({uuid: routeUuid.get(), lang: 'en'})
+    var opts = [], subjs = []
+    Subject.find({uuid: routeUuid.get(), lang: sysLang.get()}).fetch().sort(function(a,b){
+      return b.extra.trust - a.extra.trust
+    }).forEach(function(s) {
+      if(subjs.indexOf(s.subject) == -1) {
+        opts.push(s)
+        subjs.push(s.subject)
+      }
+    })
+    if(en)
+      opts.push(en)
+    return opts
   }
 })
 
@@ -71,17 +102,26 @@ Template.babelConcept.events({
   'change .selectTranslation': function(e, templ) {
     if(templ.$('.selectTranslation').val() == 'other')
       Template.instance().newTrans.set(true)
+    else
+      Template.instance().newTrans.set()
   },
   'click #newTranslationB': function(e, templ) {
-    var transl = templ.$('#newTranslation').val()
-    var sn = templ.$('#sourceN').val()
-    var surl = templ.$('#sourceUrl').val()
-    console.log(transl)
+    var transl, source = {}
+    if(templ.newTrans.get()) {
+      transl = templ.$('#newTranslation').val()
+      source.name = templ.$('#sourceN').val()
+      source.url = templ.$('#sourceUrl').val()
+    }
+    else {
+      transl = templ.$('.selectTranslation option:selected').val()
+      source.subject = templ.$('.selectTranslation option:selected').data('id')
+    }
+
     Meteor.call('addTranslation', {
       uuid: routeUuid.get(), 
       lang: sysLang.get(), 
       subject: transl,
-      source: {name: sn, url: surl}
+      source: source
     },
       function(err, res) {
       if(err) console.log(err)
