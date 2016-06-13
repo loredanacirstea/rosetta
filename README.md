@@ -1,11 +1,41 @@
 Rosetta
 =========
 
+Rosetta - Controlled Crowdsourcing of Translations
+
+Video demo: https://www.youtube.com/watch?v=zosqK7d60zE
+
+
++ Implemented in Meteor.js
+
++ Highly scalable in terms of number of users
+
++ Can be used with any type of terminology
+
++ Customizable to fit translation guidelines
+
++ Trust and rating system for users, sources and proposals
+
++ Cross-platform: web, mobile (iOS, Android), desktop (Mac OS X, Windows)
+
++ Very easy to use
+
++ Available for unlimited number of languages
+
+
+Continuing my medical terminologies work on translation solutions: https://github.com/loredanacirstea/thRoTrans
 
 Version
 --------
 
 Ver. 0.1.1
+
+
+UML
+--------
+
+
+
 
 License
 =========
@@ -24,3 +54,9 @@ Data:
 ODbL : http://opendatacommons.org/licenses/odbl/
 
 see [ODbL.txt](/ODbL.txt)
+
+
+Inspiration:
+---------
+
+Rosetta Stone: https://en.wikipedia.org/wiki/Rosetta_Stone
