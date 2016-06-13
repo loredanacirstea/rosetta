@@ -4,7 +4,9 @@ Template.adminUsers.onCreated(function() {
 
 Template.adminUsers.helpers({
   user: function() {
-    return Meteor.users.find({}).fetch()
+    var user = Meteor.user()
+    if(!user) return []
+    return Meteor.users.find({'profile.trust' : {$lt: user.profile.trust}}, {sort: {'profile.trust': -1}}).fetch()
   },
   hasRole: function(role) {
     if(this.roles)
