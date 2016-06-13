@@ -18,7 +18,11 @@ Template.browseConcepts.helpers({
     var skip = page ? (parseInt(page) * limit) : 0
     var obj = Subject.find({lang: sysLang.get()}, {skip: skip, limit: limit}).fetch()
     obj.sort(function(a,b) {
-      return b.extra.trust - a.extra.trust
+      if(b.extra.trust != a.extra.trust)
+        return b.extra.trust - a.extra.trust
+      else if(b.upd >= a.upd)
+        return 1
+      return -1
     })
     var res = [], subjs = []
     obj.forEach(function(o) {
