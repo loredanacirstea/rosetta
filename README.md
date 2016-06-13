@@ -1,7 +1,7 @@
 Rosetta
 =========
 
-Rosetta - Controlled Crowdsourcing of Translations
+Controlled Crowdsourcing of Translations
 
 Video demo: https://www.youtube.com/watch?v=zosqK7d60zE
 
@@ -35,7 +35,8 @@ UML
 --------
 
 
-
+![](http://cdn.rawgit.com/loredanacirstea/rosetta/master/public/docs/TranslationSequenceDiagram.svg)
+![](http://cdn.rawgit.com/loredanacirstea/rosetta/master/public/docs/TranslationDBDiagram.svg)
 
 License
 =========
