@@ -7,5 +7,10 @@ Template.layout1.onCreated(function() {
 Template.titleBar.helpers({
   lang: function() {
     return sysLang.get()
+  },
+  user: function() {
+    var user = Meteor.user()
+    if(user)
+      return user.profile.trust
   }
 })
