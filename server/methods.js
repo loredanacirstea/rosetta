@@ -21,6 +21,7 @@ Meteor.methods({
     delete obj.source
     console.log('add: ' + JSON.stringify(obj))
     Subject.insert(obj)
+    Concept.update({uuid: obj.uuid, lang: obj.lang}, {$set: {trust: obj.extra.trust}})
   },
   setTrust: function(userid, amount) {
     var user = Meteor.user()

@@ -1,4 +1,4 @@
-Meteor.publish('subjectstrust', function(query, options) {
+/*Meteor.publish('subjectstrust', function(query, options) {
   if(!this.userId)
     return
   var user = Meteor.users.findOne({_id: this.userId})
@@ -9,6 +9,31 @@ Meteor.publish('subjectstrust', function(query, options) {
   query['extra.trust'] = {$lt: user.profile.trust}
   options.sort = {'extra.trust': -1}
   return Subject.find(query, options)
+})*/
+
+Meteor.publishComposite('subjectstrust', function(query, options) {
+  if(!this.userId)
+    return
+  var user = Meteor.users.findOne({_id: this.userId})
+
+  query = query || {}
+  options = options || {}
+
+  query.trust = {$lt: user.profile.trust}
+  options.sort = {trust: -1}
+  console.log(JSON.stringify(query))
+  return {
+    find: function() {
+      return Concept.find(query, options)
+    },
+    children: [
+      {
+        find: function(c) {
+          return Subject.find({uuid: c.uuid, lang: c.lang, 'extra.trust': c.trust})
+        }
+      }
+    ]
+  }
 })
 
 

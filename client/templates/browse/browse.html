@@ -43,9 +43,11 @@
           <input type="text" placeholder="..." id="sourceUrl">
       {{/if}}
       {{#if currentUser}}
-        <button class="btn btn-primary btn-block btn-outlined" id="newTranslationB">
-          <span class="icon icon-plus"></span>
-        </button>
+        {{#if selected}}
+          <button class="btn btn-primary btn-block btn-outlined" id="newTranslationB">
+            <span class="icon icon-plus"></span>
+          </button>
+        {{/if}}
       {{/if}}
     <ul class="table-view">
       {{#each translation}}

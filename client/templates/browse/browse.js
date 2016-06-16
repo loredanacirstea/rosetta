@@ -4,7 +4,8 @@ Template.browseConcepts.onCreated(function() {
   var skip
   if(page)
     skip = parseInt(page) * limit
-  SubjectSubs.subscribe('subjectstrust', {lang: sysLang.get()}, {skip: skip, limit: limit})
+  //SubjectSubs.subscribe('subjectstrust', {lang: sysLang.get()}, {skip: skip, limit: limit})
+  this.subscribe('subjectstrust', {lang: sysLang.get()}, {skip: skip, limit: limit})
 })
 
 Template.browseConcepts.onRendered(function() {
@@ -15,23 +16,9 @@ Template.browseConcepts.onRendered(function() {
 Template.browseConcepts.helpers({
   result: function() {
     var page = FlowRouter.getQueryParam('page')
+    var user = Meteor.user() || {profile:{trust:0}}
     var skip = page ? (parseInt(page) * limit) : 0
-    var obj = Subject.find({lang: sysLang.get()}, {skip: skip, limit: limit}).fetch()
-    obj.sort(function(a,b) {
-      if(b.extra.trust != a.extra.trust)
-        return b.extra.trust - a.extra.trust
-      else if(b.upd >= a.upd)
-        return 1
-      return -1
-    })
-    var res = [], subjs = []
-    obj.forEach(function(o) {
-      if(subjs.indexOf(o.subject) == -1) {
-        res.push(o)
-        subjs.push(o.subject)
-      }
-    })
-    return obj
+    return Subject.find({lang: sysLang.get(), 'extra.trust': {$lt: user.profile.trust}}, {skip: skip, limit: limit, sort: {'extra.trust': -1}})
   }
 })
 
@@ -43,12 +30,13 @@ Template.babelConcept.onCreated(function() {
     var lang = sysLang.get()
     if(!uuid || !lang)
       return
-    self.conceptSub = ConceptSubs.subscribe('subjecttrust', uuid)
-    self.pathSub = PathSubs.subscribe('pathtrust', uuid, lang)
-    self.kidsSub = KidsSubs.subscribe('kidstrust', uuid, lang, {limit: 50})
+    self.subscribe('subjecttrust', uuid)
+    self.subscribe('pathtrust', uuid, lang)
+    self.subscribe('kidstrust', uuid, lang, {limit: 50})
   })
 
   this.newTrans = new ReactiveVar()
+  this.selected = new ReactiveVar()
 })
 
 Template.babelConcept.helpers({
@@ -58,7 +46,7 @@ Template.babelConcept.helpers({
     var lang = sysLang.get()
     if(!lang) return
     var rels = Relation.findOne({relation: 1, uuid2: {$ne: uuid}})
-    if(Template.instance().pathSub.ready()) {
+    if(Template.instance().subscriptionsReady()) {
       var uuids = getPathT(uuid)
       uuids.reverse()
       return uuids.map(function(id) {
@@ -75,7 +63,7 @@ Template.babelConcept.helpers({
     })
   },
   translation: function() {
-    return Subject.find({uuid: routeUuid.get(), lang: {$nin: ['jp', 'es-p']}}, {sort: {lang: -1}})
+    return Subject.find({uuid: routeUuid.get(), lang: {$nin: ['jp', 'es-p', 'es']}}, {sort: {lang: -1}})
   },
   newTranslation: function() {
     return Template.instance().newTrans.get()
@@ -99,6 +87,9 @@ Template.babelConcept.helpers({
     if(en)
       opts.push(en)
     return opts
+  },
+  selected: function() {
+    return Template.instance().selected.get()
   }
 })
 
@@ -108,6 +99,10 @@ Template.babelConcept.events({
       Template.instance().newTrans.set(true)
     else
       Template.instance().newTrans.set()
+    if(templ.$('.selectTranslation').val() != '')
+      Template.instance().selected.set(true)
+    else
+      Template.instance().selected.set()
   },
   'click #newTranslationB': function(e, templ) {
     var transl, source = {}
@@ -128,11 +123,15 @@ Template.babelConcept.events({
       source: source
     },
       function(err, res) {
-      if(err) console.log(err)
+      if(err)
+        console.log(err)
+      else {
+        templ.$('#newTranslation').val("")
+        templ.$('#sourceN').val("")
+        templ.$('#sourceUrl').val("")
+        templ.$('.selectTranslation').val("")
+        templ.newTrans.set(0)
+      }
     })
   }
 })
-
-
-
-

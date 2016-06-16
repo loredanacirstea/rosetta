@@ -5,6 +5,11 @@ import { Meteor } from 'meteor/meteor';
 Meteor.startup(() => {
   //toRelation()
   //toSubject()
+
+  /*Subject.find({lang: 'es-p'}).forEach(function(s) {
+    if(s.uuid && s.lang && s.extra)
+      Concept.insert({uuid: s.uuid, trust: s.extra.trust || 0, lang: s.lang}, {$set: {uuid: s.uuid, trust: s.extra.trust || 0, lang: s.lang}})
+  })*/
 })
 
 toRelation = function() {
@@ -20,21 +25,20 @@ toRelation = function() {
 }
 
 toSubject = function() {
-  var baseUser = Meteor.users.findOne(),
-    trust = baseUser.profile.trust
-
+  var baseUser = Meteor.users.findOne()
   Subject.find().forEach(function(s) {
-    Subject.update({_id: s._id}, {
-      $set: {
-        uuid: s.concept,
-        lang: s.language,
-        subject: s.term || '-', 
-        extra: {
-          user: baseUser._id, trust: 100, 
-          source: {name: 'FIPAT', url: "http://www.unifr.ch/ifaa/"}
+    if(s.term)
+      Subject.update({_id: s._id}, {
+        $set: {
+          uuid: s.concept,
+          lang: s.language,
+          subject: s.term, 
+          extra: {
+            user: baseUser._id, trust: 100, 
+            source: {name: 'FIPAT', url: "http://www.unifr.ch/ifaa/"}
+          }
         }
-      }
-    })
+      })
   })
   // in robomongo
   //Subject.update({}, {$unset: {id: "", term_id: "", concept: "", language: "", term: "", updatedAt: ""}}, {multi: true})
@@ -45,6 +49,7 @@ toSubject = function() {
       'extra.source': {name: "Google Translate", url: "https://translate.google.com/"}
     }
   }, {multi: true})
+
   Subject.update({lang: 'ro'}, {
     $set: {
       lang: 'ro-p',
@@ -53,4 +58,8 @@ toSubject = function() {
     }
   }, {multi: true})
   
+  Subject.find({}).forEach(function(s) {
+    if(s.uuid && s.lang && s.extra)
+      Concept.insert({uuid: s.uuid, trust: s.extra.trust || 0, lang: s.lang}, {$set: {uuid: s.uuid, trust: s.extra.trust || 0, lang: s.lang}})
+  })
 }
